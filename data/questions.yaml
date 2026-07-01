@@ -1,0 +1,44 @@
+# Perguntas-ouro do desafio. O agente deve respondê-las com rastreabilidade
+# (citando os documentos/nós de origem). "hops" é uma dica do nº de documentos a
+# conectar. Atenção: o corpus tem DISTRATORES (Cenário S2) e uma REVISÃO (Rev A/B);
+# a resposta certa nem sempre é a mais parecida.
+
+- id: Q1
+  type: single-hop + armadilha de recência/distrator
+  question: "Qual é o diâmetro de flowline VIGENTE do Cenário S1? Há revisão proposta?"
+  hops: 2
+  # esperado: VIGENTE = 8" (Rev A, docs 04/08/10). Existe a Rev B propondo 10" (NÃO aprovada).
+  # armadilhas: doc 09 (S2) diz 12"; a Rev B diz 10". Quem ignora status/cenário erra.
+
+- id: Q2
+  type: multi-hop
+  question: "Por que o Cenário S1 exige aquecimento ativo?"
+  hops: 3
+  # esperado: flowline de 8" (Rev A) + tieback de 18 km derrubam a temperatura de
+  # chegada (~26 °C) abaixo da WAT de 31 °C (FA-3). Conecta docs 02, 04, 05.
+
+- id: Q3
+  type: multi-hop
+  question: "Qual é o impacto econômico líquido de escolher o flowline de 8 polegadas no S1?"
+  hops: 3
+  # esperado: economia de US$22MM em linha é consumida pelo custo do aquecimento ativo
+  # (CAPEX +15MM, OPEX +9MM) exigido pela FA-3 -> efeito líquido ~ -US$2MM. Docs 04, 05, 06, 07.
+
+- id: Q4
+  type: multi-hop
+  question: "Qual propriedade do reservatório dirige o risco de flow assurance, e qual decisão de subsea o amplifica?"
+  hops: 2
+  # esperado: WAT de 31 °C (doc 02) + flowline de 8"/tieback de 18 km, decisão D-12 Rev A (doc 04).
+
+- id: Q5
+  type: single-hop + distrator de cenário
+  question: "Quantos poços produtores alimentam o sistema submarino do Cenário S1?"
+  hops: 1
+  # esperado: 6 (doc 03). Armadilha: o doc 09 (Cenário S2) diz 8 produtores.
+
+- id: Q6
+  type: conflito / governança
+  question: "Se a Rev B fosse aprovada, o que mudaria na cadeia de aquecimento e no resultado econômico do S1?"
+  hops: 4
+  # esperado: 10" eliminaria a FA-3 -> sem aquecimento -> sem +4,5 MW (topside) -> some o
+  # custo de +15MM CAPEX e +9MM OPEX. Exige raciocinar sobre a revisão NÃO vigente. Docs 04,05,06,07,10.
