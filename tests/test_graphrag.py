@@ -45,8 +45,10 @@ def test_key_nodes_exist(kg):
 def test_q1_diametro_vigente_e_8(kg):
     ans = answer_question(kg, "Qual e o diametro de flowline VIGENTE do Cenario S1?")
     txt = _norm(ans.text)
-    assert "8" in txt
-    assert "12" not in txt  # 12" e do cenario S2 (distrator)
+    assert "8 polegadas" in txt or '8"' in txt
+    # distratores de diametro: 12" e do S2, 10" e a Rev B (nao vigente)
+    assert '12"' not in txt and "12 polegadas" not in txt
+    assert "09" not in ans.sources  # doc 09 (S2) nao pode ser fonte
     assert "04" in ans.sources or "08" in ans.sources or "10" in ans.sources
 
 

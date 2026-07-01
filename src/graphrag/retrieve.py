@@ -44,6 +44,24 @@ def _detect_revb(qn: str) -> bool:
     return "rev b" in qn or "revisao" in qn or ("10" in qn and "aprovad" in qn)
 
 
+# Gatilhos de multi-hop: perguntas causais/economicas precisam percorrer a cadeia;
+# as demais sao respondidas junto das sementes (recuperacao seletiva -> precision).
+_MULTIHOP_TRIGGERS = (
+    "por que", "porque", "impacto", "economico", "liquido", "cadeia",
+    "amplifica", "dirige", "mudaria", "se a rev",
+)
+
+
+def _hops_for(qn: str) -> int:
+    """Profundidade adaptativa: 2 para perguntas multi-hop, 1 caso contrario.
+
+    O grafo e pequeno e denso; expandir 3 hops de qualquer no alcanca quase tudo e
+    derruba a precision. Perguntas diretas ficam em 1 hop (semente + vizinhos
+    imediatos); as causais/economicas sobem para 2.
+    """
+    return 2 if any(t in qn for t in _MULTIHOP_TRIGGERS) else 1
+
+
 def _find_seeds(kg: KnowledgeGraph, qn: str, cenario: str) -> list[str]:
     """Casa os aliases de cada no contra a pergunta normalizada.
 
@@ -63,10 +81,12 @@ def _find_seeds(kg: KnowledgeGraph, qn: str, cenario: str) -> list[str]:
     return [nid for _, nid in hits]
 
 
-def retrieve(kg: KnowledgeGraph, question: str, max_hops: int = 3) -> Retrieval:
+def retrieve(kg: KnowledgeGraph, question: str, max_hops: int | None = None) -> Retrieval:
     qn = _norm(question)
     cenario = _detect_cenario(qn)
     revb = _detect_revb(qn)
+    if max_hops is None:
+        max_hops = _hops_for(qn)
 
     seeds = _find_seeds(kg, qn, cenario)
 
@@ -87,7 +107,13 @@ def retrieve(kg: KnowledgeGraph, question: str, max_hops: int = 3) -> Retrieval:
             if attrs.get("rev") == "B" and nid not in seeds:
                 seeds.append(nid)
 
-    subgraph = kg.bfs(seeds, max_hops=max_hops, keep=keep) if seeds else []
+    # Segue apenas as arestas da cadeia causal na travessia. PERTENCE_A e apenas
+    # organizacao (cenario/disciplina) e criaria atalhos por nos-ancora muito
+    # conectados, inflando o subgrafo e derrubando a precision.
+    causal = ("IMPACTA", "DERIVA_DE", "EXIGE", "GERA_CUSTO")
+    subgraph = (
+        kg.bfs(seeds, max_hops=max_hops, etypes=causal, keep=keep) if seeds else []
+    )
     sources = kg.docs_of(subgraph)
 
     facts = []

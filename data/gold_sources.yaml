@@ -1,0 +1,9 @@
+# Documentos-fonte esperados por pergunta (gabarito de rastreabilidade).
+# Derivado dos comentarios de questions.yaml. Mantido separado para nao alterar
+# o artefato original do desafio. Usado por `python -m graphrag --eval`.
+Q1: ["04", "08", "10"]
+Q2: ["02", "04", "05"]
+Q3: ["04", "05", "06", "07"]
+Q4: ["02", "04"]
+Q5: ["03"]
+Q6: ["04", "05", "06", "07", "10"]
