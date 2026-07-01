@@ -10,6 +10,12 @@ O corpus contém armadilhas de propósito (um segundo cenário, S2, e uma revis�
 decisão não aprovada). O trabalho central é recuperar a informação **vigente e do
 cenário certo**, não a mais parecida.
 
+## Vídeo (5 min)
+
+Percorrendo o raciocínio — schema, como o GraphRAG resolve o multi-hop, priorização
+de precision e o que ficou de fora:
+**https://drive.google.com/file/d/116mmUPXXqWUfZ7DCYSPfHFXs1MWZ7cN4/view?usp=sharing**
+
 ## Documentos do projeto
 
 Três documentos, com papéis distintos:
