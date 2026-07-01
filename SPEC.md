@@ -176,6 +176,14 @@ inteiro na ingestão, antes de qualquer pergunta; a consulta apenas entra e perc
   (vigência na Q1, cenário na Q5); e que a cadeia econômica da Q3 chega ao efeito
   líquido.
 
+- **Resultado medido (`--eval`):** precision média 0.76 e recall médio 0.94 das
+  fontes, com **nenhum distrator do S2 recuperado em qualquer pergunta** — que é o
+  modo de falha central do desafio. A Q5 (single-hop com distrator) fica em 1.00/1.00.
+  O recall abaixo de 1.0 vem da Q1, que não recupera o log de decisões (doc 08) por
+  ele não ser modelado como nó próprio; a decisão foi não perseguir cada documento
+  residual para evitar sobreajuste ao gabarito — a recuperação seletiva já está
+  demonstrada.
+
 - **O que deliberadamente não testamos:** fluência do texto gerado, perguntas fora
   do conjunto-ouro e robustez a variações linguísticas amplas — o entity linking é
   sob medida para este corpus.
